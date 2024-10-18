@@ -4,7 +4,7 @@ const path = require('path');
 const CatLoggr = require('cat-loggr');
 const logger = new CatLoggr().setLevel(process.env.COMMANDS_DEBUG === 'true' ? 'debug' : 'info');
 const Discord = require('discord.js');
-const client = new Discord.Client({  
+const client = new Discord.Client({
   intents: [
     Discord.GatewayIntentBits.Guilds,
     Discord.GatewayIntentBits.GuildMessages,
