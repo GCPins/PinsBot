@@ -47,6 +47,10 @@ module.exports = class MoveallCommand extends SlashCommand {
         }
       });
 
+      if (!chlstr) {
+        return ctx.send(`No users were detected (aside from yourself) - go find some "friends" before trying again.`, { ephemeral: true });
+      }
+
       let numU = 0;
       fromchls.forEach(c => {
         c.members.forEach(m => {
