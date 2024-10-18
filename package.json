@@ -1,0 +1,25 @@
+{
+  "name": "slash-create-template",
+  "version": "1.0.0",
+  "description": "A template for slash-create",
+  "main": "src/index.js",
+  "scripts": {
+    "sync": "slash-up sync",
+    "sync:dev": "slash-up sync -e development",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "cat-loggr": "^1.1.0",
+    "discord.js": "^14.16.3",
+    "dotenv": "^8.2.0",
+    "fastify": "^3.9.2",
+    "slash-create": "^5.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.15.0",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-plugin-prettier": "^3.3.0",
+    "prettier": "^2.2.1",
+    "slash-up": "^1.0.11"
+  }
+}
