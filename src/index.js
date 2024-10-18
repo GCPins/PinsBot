@@ -12,6 +12,8 @@ const client = new Discord.Client({
     Discord.GatewayIntentBits.GuildMembers,
   ],
 });
+const { QuickDB } = require("quick.db");
+const db = new QuickDB();
 
 module.exports = client;
 
