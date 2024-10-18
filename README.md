@@ -1,7 +1,7 @@
-# slash-create-template
-This templates helps you in creating slash commands from a webserver.
+# PinsBot
+This bot is for personal usage, among other things.
 
-[View the TypeScript branch here](https://github.com/Snazzah/slash-create)
+[Made with SlashCreate](https://github.com/Snazzah/slash-create)
 
 ## Installation
 ```sh
