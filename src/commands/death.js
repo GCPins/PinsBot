@@ -1,5 +1,6 @@
 const { SlashCommand, CommandOptionType, Command } = require('slash-create');
 const client = require('../index.js');
+const { PermissionsBitField } = require('discord.js');
 
 const { QuickDB } = require("quick.db");
 const db = new QuickDB();
@@ -22,9 +23,7 @@ module.exports = class DeathCommand extends SlashCommand {
             type: CommandOptionType.CHANNEL,
             name: 'set',
             description: 'The channel to send a copy of a roll to'
-        }],
-        defaultPermission: false,
-        requiredPermissions: ['ADMINISTRATOR']
+        }]
       }],
     });
   }
@@ -32,9 +31,7 @@ module.exports = class DeathCommand extends SlashCommand {
   async run(ctx) {
 
     let guild = client.guilds.cache.get(ctx.guildID);
-    let executer = guild.members.cache.get(ctx.member.id);
-
-    console.log(executer);
+    let executer = await guild.members.fetch(ctx.member.id);
 
     let dc = await db.get(`${ctx.guildID}.deathc`);
 
@@ -47,13 +44,17 @@ module.exports = class DeathCommand extends SlashCommand {
         
         if (dc) {
             let chl = guild.channels.cache.get(dc); 
-            chl.send(`${executer.nickname} (User ID: \`${ctx.member.id}\`) JUST ROLLED A DEATH SAVE.\n__Result:__ *${messg}*`);
+            chl.send(`${executer.nickname ? executer.nickname : executer.user.globalName} (User ID: \`${ctx.member.id}\`) JUST ROLLED A DEATH SAVE.\n__Result:__ *${messg}*`);
         }
 
         return ctx.send(messg, { ephemeral: true});
     }
 
     if (ctx.options.channel) {
+
+        if (!executer.permissions.has(PermissionsBitField.Flags.Administrator)) {
+            return ctx.send("You cannot use this command, you do not have the **Administrator** permission.", { ephemeral: true });
+        }
 
         if (ctx.options.channel.set) {
             await db.set(`${ctx.guildID}.deathc`, ctx.options.channel.set);
