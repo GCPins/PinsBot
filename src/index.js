@@ -10,6 +10,7 @@ const client = new Discord.Client({
     Discord.GatewayIntentBits.GuildMessages,
     Discord.GatewayIntentBits.MessageContent,
     Discord.GatewayIntentBits.GuildMembers,
+    Discord.GatewayIntentBits.GuildVoiceStates
   ],
 });
 const { QuickDB } = require("quick.db");
