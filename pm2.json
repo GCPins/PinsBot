@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "slash-commands",
+      "name": "pins-bot",
 			"script": "node",
 			"args": "src/index.js"
     }
