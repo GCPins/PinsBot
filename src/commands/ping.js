@@ -32,8 +32,6 @@ module.exports = class PingCommands extends SlashCommand {
             .setColor('Random')
             .setDescription(`${msg}\nCalculating Client ping... (please wait)`);
 
-        //const prev = await ctx.send(`${msg}\nCalculating Client ping... (please wait)`, {  });
-
         const prev = await ctx.send("", { embeds: [ teste ], ephemeral: true });
         
         ping = Math.floor(Date.now() - ctx.invokedAt);
@@ -58,6 +56,5 @@ module.exports = class PingCommands extends SlashCommand {
             .setDescription(`${msg}`);
 
         return ctx.editOriginal({embeds: [ teste ], ephemeral: true});
-        //return ctx.editOriginal("Goodbye!", { ephemeral: true });
   }
 }
