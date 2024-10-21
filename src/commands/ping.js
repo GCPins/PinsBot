@@ -6,7 +6,7 @@ module.exports = class PingCommand extends SlashCommand {
   constructor(creator) {
     super(creator, {
       name: 'ping',
-      description: 'Pong around and find out...',
+      description: 'Pong around and find out',
       guildIDs: ['660685280717701120'],
       throttling: {
         usages: 2,

@@ -9,12 +9,12 @@ module.exports = class DeathCommand extends SlashCommand {
   constructor(creator) {
     super(creator, {
       name: 'death',
-      description: 'Death save rolling/management.',
+      description: 'Death save rolling (and management)',
       guildIDs: ['660685280717701120'],
       options: [{
         type: CommandOptionType.SUB_COMMAND,
         name: 'roll',
-        description: 'Roll a secret death save that is only visible to you.'
+        description: 'Roll a secret death save that is only visible to you'
       }, {
         type: CommandOptionType.SUB_COMMAND,
         name: 'channel',
@@ -36,8 +36,6 @@ module.exports = class DeathCommand extends SlashCommand {
     let dc = await db.get(`${ctx.guildID}.deathc`);
 
     if (ctx.options.roll) {
-
-        let prev;
 
         let rNum = Math.floor(Math.random() * 20) + 1; // random num from 1..20
         let messg = `You rolled a **${rNum}**, which is a `;
