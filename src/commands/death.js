@@ -69,4 +69,9 @@ module.exports = class DeathCommand extends SlashCommand {
     }
 
   }
+
+  static name = "death";
+  static perm = "";
+  static description = "Roll a death save or manage the channel death saves are sent to";
+
 }

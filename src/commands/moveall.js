@@ -106,4 +106,9 @@ module.exports = class MoveallCommand extends SlashCommand {
 
     return ctx.send(`Moved **${numU}** user(s) from ${fromchl} (ID: \`${fromchl.id}\`) to ${tochl} (ID: \`${tochl.id}\`).`, { ephemeral: true });
   }
+
+  static name = "moveall";
+  static perm = "MOVE_MEMBERS";
+  static description = "A command to move large quantites of users across voice channels";
+
 }

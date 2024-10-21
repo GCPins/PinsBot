@@ -20,4 +20,9 @@ module.exports = class MysteryCommand extends SlashCommand {
       return ctx.send("Under construction...", { ephemeral: true });
 
   }
+
+  static name = "mystery";
+  static perm = "";
+  static description = "d5397#%%x038  _4 2_4233ndaJAH1";
+
 }

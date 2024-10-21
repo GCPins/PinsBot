@@ -57,4 +57,9 @@ module.exports = class PingCommand extends SlashCommand {
 
         return ctx.editOriginal({embeds: [ teste ], ephemeral: true});
   }
+
+  static name = "ping";
+  static perm = "";
+  static description = "A simple command to check the ping of the bot";
+
 }
