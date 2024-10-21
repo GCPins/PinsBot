@@ -16,7 +16,7 @@ const client = new Discord.Client({
 const { QuickDB } = require("quick.db");
 const db = new QuickDB();
 
-module.exports = client;
+module.exports = {client, logger};
 
 const creator = new SlashCreator({
   applicationID: process.env.DISCORD_APP_ID,

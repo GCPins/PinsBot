@@ -1,5 +1,5 @@
 const { SlashCommand, CommandOptionType, Command } = require('slash-create');
-const client = require('../index.js');
+const {client, logger}  = require('../index.js');
 const { PermissionsBitField } = require('discord.js');
 
 const { QuickDB } = require("quick.db");
@@ -37,13 +37,15 @@ module.exports = class DeathCommand extends SlashCommand {
 
     if (ctx.options.roll) {
 
+        let prev;
+
         let rNum = Math.floor(Math.random() * 20) + 1; // random num from 1..20
         let messg = `You rolled a **${rNum}**, which is a `;
-        if (rNum == 1 || rNum == 20) messg += "**CRITICAL** ";    
+        if (rNum == 1 || rNum == 20) messg += "**CRITICAL** ";
         rNum < 10 ? messg += "FAIL (womp womp).": messg += "SUCCESS!!!";
-        
+
         if (dc) {
-            let chl = guild.channels.cache.get(dc); 
+            let chl = guild.channels.cache.get(dc);
             chl.send(`${executer.nickname ? executer.nickname : executer.user.globalName} (User ID: \`${ctx.member.id}\`) JUST ROLLED A DEATH SAVE.\n__Result:__ *${messg}*`);
         }
 

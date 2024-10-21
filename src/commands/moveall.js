@@ -1,5 +1,5 @@
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const client = require('../index.js');
+const { client, logger } = require('../index.js');
 
 module.exports = class MoveallCommand extends SlashCommand {
   constructor(creator) {

@@ -1,8 +1,8 @@
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const client = require('../index.js');
+const { client, logger } = require('../index.js');
 const Discord = require('discord.js');
 
-module.exports = class PingCommands extends SlashCommand {
+module.exports = class PingCommand extends SlashCommand {
   constructor(creator) {
     super(creator, {
       name: 'ping',
@@ -17,13 +17,13 @@ module.exports = class PingCommands extends SlashCommand {
 
   async run(ctx) {
 
-        await ctx.defer(true);      
+        await ctx.defer(true);
 
         let total = 0;
 
         let ping = client.ws.shards.get(0).ping; // client.ws.ping  would also work
         let symbol = ping < 0 ? ":exclamation:" : ping < 100 ? ":green_square:" : ping < 200 ? ":orange_square:" : ":red_square:";
-        let msg = `${symbol} API Latency is **${(ping)}**ms ${symbol}`; 
+        let msg = `${symbol} API Latency is **${(ping)}**ms ${symbol}`;
         total += ping;
 
         let teste = new Discord.EmbedBuilder()
@@ -33,7 +33,7 @@ module.exports = class PingCommands extends SlashCommand {
             .setDescription(`${msg}\nCalculating Client ping... (please wait)`);
 
         const prev = await ctx.send("", { embeds: [ teste ], ephemeral: true });
-        
+
         ping = Math.floor(Date.now() - ctx.invokedAt);
         symbol = ping <= 0 ? ":exclamation:" : ping < 500 ? ":green_square:" : ping < 750 ? ":orange_square:" : ":red_square:";
         msg += `\n${symbol} Bot Latency is **${ping}**ms ${symbol}`;
@@ -47,7 +47,7 @@ module.exports = class PingCommands extends SlashCommand {
         msg += '\n';
 
         symbol = total <= 0 ? ":exclamation:" : total < 700 ? ":green_square:" : total < 900 ? ":orange_square:" : ":red_square:";
-        msg += `\n${symbol} __TOTAL__: **${total}**ms ${symbol}`; 
+        msg += `\n${symbol} __TOTAL__: **${total}**ms ${symbol}`;
 
         teste = new Discord.EmbedBuilder()
             .setTitle(":ping_pong:  PONG  :ping_pong:")
