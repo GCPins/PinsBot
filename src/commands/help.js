@@ -41,14 +41,17 @@ module.exports = class HelpCommand extends SlashCommand {
 
       props = require(`${cmdsPath}/${choice}.js`);
 
+      let permStr = "";
       if (props.perm) {
         if (!executer.permissions.has(props.perm)) {
           return ctx.send(`That command does not exist, or you do not have permission to use it - check your spelling and try again.`, { ephemeral: true });
         }
+        permStr += `\n**REQUIRED PERMISSION:** \`${props.perm}\``;
       }
 
       str += `**NAME:** \`${props.name}\`\n`;
       str += `**DESCRIPTION:** *${props.description}*`;
+      str += permStr;
 
       return ctx.send(`The help command result for your selected cmd is below:\n\n${str}`, { ephemeral: true });
     }
@@ -74,12 +77,12 @@ module.exports = class HelpCommand extends SlashCommand {
       }
     })
 
-    return ctx.send(`The command you can use are:\n\n${str}`, {ephemeral: true});
+    return ctx.send(`The commands available for you to use are:\n\n${str}\n\n*To get more information about a specific command, use \`/help cmd:COMMANDNAME\`*`, {ephemeral: true});
     //return ctx.send("Under construction...", { ephemeral: true });
 
   }
 
   static name = "help";
   static perm = "";
-  static description = "A simple command to display the help menu";
+  static description = "A simple command to display the help menu - includes a list of all commands and an option to view specific details for each command.";
 }
