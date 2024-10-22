@@ -1,5 +1,5 @@
 const { SlashCommand, CommandOptionType, Command } = require('slash-create');
-const { client, logger } = require('../index.js');
+const { client, logger, cmdsList } = require('../index.js');
 const Discord = require('discord.js');
 const fs = require('fs');
 const path = require('path');
@@ -27,12 +27,14 @@ module.exports = class HelpCommand extends SlashCommand {
     let guild = client.guilds.cache.get(ctx.guildID);
     let executer = await guild.members.fetch(ctx.member.id);
 
+    /*
     const cmdsPath = path.join(__dirname, '../commands');
 
     const cmdFiles = fs.readdirSync(cmdsPath).filter(f => f.endsWith('.js'));
-
+    */
     let autoCmds = [];
-    cmdFiles.forEach((f) => {
+
+    cmdsList.forEach((f) => {
       let props = require(`./${f}`);
       if (!props.perm) {
         autoCmds.push(props.name);
@@ -56,7 +58,7 @@ module.exports = class HelpCommand extends SlashCommand {
     let guild = client.guilds.cache.get(ctx.guildID);
     let executer = await guild.members.fetch(ctx.member.id);
 
-    const cmdsPath = path.join(__dirname, '../commands');
+    //const cmdsPath = path.join(__dirname, '../commands');
     let props;
 
     if (ctx.options.cmd) {
@@ -64,11 +66,11 @@ module.exports = class HelpCommand extends SlashCommand {
       let choice = (ctx.options.cmd).toLowerCase();
       let str = "";
 
-      if (!fs.existsSync(`${cmdsPath}/${choice}.js`)) {
+      if (!cmdsList.includes(`${choice}.js`)) {
         return ctx.send(`That command does not exist, or you do not have permission to use it - check your spelling and try again.`, { ephemeral: true });
       }
 
-      props = require(`${cmdsPath}/${choice}.js`);
+      props = require(`./${choice}.js`);
 
       let permStr = "";
       if (props.perm) {
@@ -85,16 +87,16 @@ module.exports = class HelpCommand extends SlashCommand {
       return ctx.send(`The help command result for your selected cmd is below:\n\n${str}`, { ephemeral: true });
     }
 
-    const cmdFiles = fs.readdirSync(cmdsPath).filter(f => f.endsWith('.js'));
+    //const cmdFiles = fs.readdirSync(cmdsPath).filter(f => f.endsWith('.js'));
 
-    if (cmdFiles.length == 0) {
+    if (cmdsList.length == 0) {
       return ctx.send("No commands loaded, not a single one exists!\n\nNow how did this happen?", { ephemeral: true });
     }
 
     let str = "";
     let temp;
 
-    cmdFiles.forEach((f) => {
+    cmdsList.forEach((f) => {
       console.log(f);
       let props = require(`./${f}`);
       if (!props.perm) {

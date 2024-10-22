@@ -4,6 +4,8 @@ const path = require('path');
 const CatLoggr = require('cat-loggr');
 const logger = new CatLoggr().setLevel(process.env.COMMANDS_DEBUG === 'true' ? 'debug' : 'info');
 const Discord = require('discord.js');
+const fs = require('fs');
+
 const client = new Discord.Client({
   intents: [
     Discord.GatewayIntentBits.Guilds,
@@ -16,7 +18,16 @@ const client = new Discord.Client({
 const { QuickDB } = require("quick.db");
 const db = new QuickDB();
 
-module.exports = {client, logger};
+// populate cmdsList with list of commands
+const cmdsPath = path.join(__dirname, './commands');
+const cmdFiles = fs.readdirSync(cmdsPath).filter(f => f.endsWith('.js'));
+
+const cmdsList = [];
+cmdFiles.forEach((f) => {
+  cmdsList.push(f);
+});
+
+module.exports = {client, logger, cmdsList};
 
 const creator = new SlashCreator({
   applicationID: process.env.DISCORD_APP_ID,
