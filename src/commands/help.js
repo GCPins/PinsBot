@@ -55,6 +55,8 @@ module.exports = class HelpCommand extends SlashCommand {
 
   async run(ctx) {
 
+    // IMPORTANT ! ! ! ! ! +> + =.>>>> (this.creator.commands.forEach(c => logger.info(c)));
+
     let guild = client.guilds.cache.get(ctx.guildID);
     let executer = await guild.members.fetch(ctx.member.id);
 
@@ -97,7 +99,6 @@ module.exports = class HelpCommand extends SlashCommand {
     let temp;
 
     cmdsList.forEach((f) => {
-      console.log(f);
       let props = require(`./${f}`);
       if (!props.perm) {
         str += `\`${props.name}\` `
