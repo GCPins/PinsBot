@@ -17,9 +17,38 @@ module.exports = class HelpCommand extends SlashCommand {
       options: [{
         name: 'cmd',
         description: 'The command to get more info on',
-        type: CommandOptionType.STRING
+        type: CommandOptionType.STRING,
+        autocomplete: true    //would allow use to provide "list" of available commands
       }]
     });
+  }
+
+  async autocomplete(ctx) {
+    let guild = client.guilds.cache.get(ctx.guildID);
+    let executer = await guild.members.fetch(ctx.member.id);
+
+    const cmdsPath = path.join(__dirname, '../commands');
+
+    const cmdFiles = fs.readdirSync(cmdsPath).filter(f => f.endsWith('.js'));
+
+    let autoCmds = [];
+    cmdFiles.forEach((f) => {
+      let props = require(`./${f}`);
+      if (!props.perm) {
+        autoCmds.push(props.name);
+      } else {
+        if (executer.permissions.has(props.perm)) {
+          autoCmds.push(props.name);
+        }
+      }
+    });
+
+    console.log(ctx);
+
+    const filtered = autoCmds.filter(c => c.startsWith(ctx.options.cmd) );
+
+    await ctx.sendResults(filtered.map(c => ({ name: c, value: c })));
+
   }
 
   async run(ctx) {
