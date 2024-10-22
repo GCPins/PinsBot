@@ -45,8 +45,6 @@ module.exports = class HelpCommand extends SlashCommand {
       }
     });
 
-    console.log(ctx);
-
     const filtered = autoCmds.filter(c => c.startsWith(ctx.options.cmd) );
 
     await ctx.sendResults(filtered.map(c => ({ name: c, value: c })));
@@ -54,8 +52,6 @@ module.exports = class HelpCommand extends SlashCommand {
   }
 
   async run(ctx) {
-
-    // IMPORTANT ! ! ! ! ! +> + =.>>>> (this.creator.commands.forEach(c => logger.info(c)));
 
     let guild = client.guilds.cache.get(ctx.guildID);
     let executer = await guild.members.fetch(ctx.member.id);
