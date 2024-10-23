@@ -35,7 +35,7 @@ module.exports = class HelpCommand extends SlashCommand {
 
     let autoCmds = [];
 
-    /*
+
     for (const c in cmdObjs) {
       if (!cmdObjs[c].perm) {
         autoCmds.push(c);
@@ -45,9 +45,8 @@ module.exports = class HelpCommand extends SlashCommand {
         }
       }
     }
-    */
 
-
+    /*
     cmdsList.forEach((f) => {
       let props = require(`./${f}`);
       if (!props.perm) {
@@ -58,6 +57,7 @@ module.exports = class HelpCommand extends SlashCommand {
         }
       }
     });
+    */
 
     const filtered = autoCmds.filter(c => c.startsWith(ctx.options.cmd) );
 
@@ -78,11 +78,13 @@ module.exports = class HelpCommand extends SlashCommand {
       let choice = (ctx.options.cmd).toLowerCase();
       let str = "";
 
-      if (!cmdsList.includes(`${choice}.js`)) {
+      //if (!cmdsList.includes(`${choice}.js`)) {
+      if (!cmdObjs[choice]) {
         return ctx.send(`That command does not exist, or you do not have permission to use it - check your spelling and try again.`, { ephemeral: true });
       }
 
-      props = require(`./${choice}.js`);
+      //props = require(`./${choice}.js`);
+      props = cmdObjs[choice];
 
       let permStr = "";
       if (props.perm) {
@@ -92,7 +94,7 @@ module.exports = class HelpCommand extends SlashCommand {
         permStr += `\n**REQUIRED PERMISSION:** \`${props.perm}\``;
       }
 
-      str += `**NAME:** \`${props.name}\`\n`;
+      str += `**NAME:** \`${choice}\`\n`;
       str += `**DESCRIPTION:** *${props.description}*`;
       str += permStr;
 
@@ -101,13 +103,24 @@ module.exports = class HelpCommand extends SlashCommand {
 
     //const cmdFiles = fs.readdirSync(cmdsPath).filter(f => f.endsWith('.js'));
 
-    if (cmdsList.length == 0) {
+    if (/*cmdsList.length == 0 || */Object.keys(cmdObjs).length == 0) {
       return ctx.send("No commands loaded, not a single one exists!\n\nNow how did this happen?", { ephemeral: true });
     }
 
     let str = "";
     let temp;
 
+    for (const c in cmdObjs) {
+      if (!cmdObjs[c].perm) {
+        str += `\`${c}\` `;
+      } else {
+        if (executer.permissions.has(cmdObjs[c].perm)) {
+          str += `\`${c}\` `;
+        }
+      }
+    }
+
+    /*
     cmdsList.forEach((f) => {
       let props = require(`./${f}`);
       if (!props.perm) {
@@ -118,6 +131,7 @@ module.exports = class HelpCommand extends SlashCommand {
         }
       }
     })
+      */
 
     return ctx.send(`The commands available for you to use are:\n\n${str}\n\n*To get more information about a specific command, use \`/help cmd:COMMANDNAME\`*`, {ephemeral: true});
     //return ctx.send("Under construction...", { ephemeral: true });
