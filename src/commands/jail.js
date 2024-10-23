@@ -5,12 +5,13 @@ const Discord = require('discord.js');
 const { QuickDB } = require('quick.db');
 const db = new QuickDB();
 
-module.exports = class MysteryCommand extends SlashCommand {
+module.exports = class JailCommand extends SlashCommand {
   constructor(creator) {
     super(creator, {
       name: 'jail',
       description: 'Jail users and manage the jail role for this server',
       guildIDs: ['660685280717701120'],
+      requiredPermissions: ["ADMINISTRATOR"],
       throttling: {
         usages: 2,
         duration: 5
@@ -34,7 +35,8 @@ module.exports = class MysteryCommand extends SlashCommand {
                 {
                   name: 'role',
                   description: 'The role to set as the jail role',
-                  type: CommandOptionType.ROLE
+                  type: CommandOptionType.ROLE,
+                  required: true
                 }
               ]
             }
@@ -48,7 +50,8 @@ module.exports = class MysteryCommand extends SlashCommand {
             {
               name: 'name',
               description: 'The user to jail',
-              type: CommandOptionType.USER
+              type: CommandOptionType.USER,
+              required: true
             }
           ]
         },
@@ -123,7 +126,6 @@ module.exports = class MysteryCommand extends SlashCommand {
       }
 
       let target = await guild.members.fetch(ctx.options.user.name);
-      logger.info(target);
 
       // else (jail role exists, proceed to jail user)
       if (target.roles.cache.has(jailRole) && !forceEnabled) {
@@ -133,7 +135,33 @@ module.exports = class MysteryCommand extends SlashCommand {
         );
       }
 
+      let oldRoles = await db.get(`${guild.id}.${target.id}.cr`);
+      if (!oldRoles) oldRoles = []; // confiscated roles + fix for empty db
+      let _userRoles = target.roles.cache
+      let userRoles = _userRoles.map(r => r.id);
+
+      let jailRoles = [];
+      oldRoles.forEach(r => {
+        if (!userRoles.includes(r) && r != jailRole) { // dont add jail role
+          // the user still has a role from the old roles db. add it to the roles to be preserved
+          jailRoles.push(r); // should be just a role ID, should make this easier
+        } // else, do not add it (effectively removing it once we set db)
+      })
+
+      userRoles.forEach(r => {
+        if (r == jailRole) return; // don't add jail role to array might break stuff
+        jailRoles.push(r);
+      })
+
+      logger.warn('USER ROLES to save: ' + jailRoles);
+
+      target.roles.set([jailRole]).catch(err => {
+        logger.warn('I don\'t have permission to do that.');
+        return ctx.send(`An error occured while removing the user's roles. I must have a role above their highest role for this command to work correctly.`, { ephemeral: true });
+      });
+
       // jail time!!!
+      return ctx.send(`Successfully jailed <@${target.id}> (ID: \`${target.id}\`) by assigning them with only the role <@&${jailRole}>.\n\n*You can free the user at any time with the command \`/free user:@${target.nickname ? target.nickname : target.displayName}\`*`, { ephemeral: true });
 
     }
   }
