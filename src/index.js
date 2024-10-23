@@ -22,12 +22,20 @@ const db = new QuickDB();
 const cmdsPath = path.join(__dirname, './commands');
 const cmdFiles = fs.readdirSync(cmdsPath).filter(f => f.endsWith('.js'));
 
+const cmdObjs = {};
 const cmdsList = [];
-cmdFiles.forEach((f) => {
+cmdFiles.forEach(async (f) => {
+  const curCmd = await import(`./commands/${f}`);
+  let props = new curCmd.default();
+  logger.warn(props);
+  cmdObjs[props.commandName] = {
+    "perm": props.requiredPermissions ? props.requiredPermissions[0] : "",
+    "description": props.description
+  }
   cmdsList.push(f);
-});
+}); // maybe make this a json object? me thinks YES
 
-module.exports = {client, logger, cmdsList};
+module.exports = {client, logger, cmdsList, cmdObjs};
 
 const creator = new SlashCreator({
   applicationID: process.env.DISCORD_APP_ID,

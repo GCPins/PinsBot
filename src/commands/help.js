@@ -1,5 +1,5 @@
 const { SlashCommand, CommandOptionType, Command } = require('slash-create');
-const { client, logger, cmdsList } = require('../index.js');
+const { client, logger, cmdsList, cmdObjs } = require('../index.js');
 const Discord = require('discord.js');
 const fs = require('fs');
 const path = require('path');
@@ -44,7 +44,6 @@ module.exports = class HelpCommand extends SlashCommand {
         }
       }
     });
-
     const filtered = autoCmds.filter(c => c.startsWith(ctx.options.cmd) );
 
     await ctx.sendResults(filtered.map(c => ({ name: c, value: c })));
@@ -52,6 +51,15 @@ module.exports = class HelpCommand extends SlashCommand {
   }
 
   async run(ctx) {
+
+    logger.warn(cmdObjs);
+
+    /*
+    for (const c in cmdObjs) {
+      logger.info(c);
+      logger.info(cmdObjs[c]);
+    }
+    */
 
     let guild = client.guilds.cache.get(ctx.guildID);
     let executer = await guild.members.fetch(ctx.member.id);
