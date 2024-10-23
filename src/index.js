@@ -35,7 +35,7 @@ cmdFiles.forEach(async (f) => {
   }
   */
   cmdsList.push(f);
-}); // maybe make this a json object? me thinks YES
+});
 
 module.exports = {client, logger, cmdsList, cmdObjs};
 
