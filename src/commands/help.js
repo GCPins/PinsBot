@@ -32,7 +32,21 @@ module.exports = class HelpCommand extends SlashCommand {
 
     const cmdFiles = fs.readdirSync(cmdsPath).filter(f => f.endsWith('.js'));
     */
+
     let autoCmds = [];
+
+    /*
+    for (const c in cmdObjs) {
+      if (!cmdObjs[c].perm) {
+        autoCmds.push(c);
+      } else {
+        if (executer.permissions.has(cmdObjs[c].perm)) {
+          autoCmds.push(c);
+        }
+      }
+    }
+    */
+
 
     cmdsList.forEach((f) => {
       let props = require(`./${f}`);
@@ -44,6 +58,7 @@ module.exports = class HelpCommand extends SlashCommand {
         }
       }
     });
+
     const filtered = autoCmds.filter(c => c.startsWith(ctx.options.cmd) );
 
     await ctx.sendResults(filtered.map(c => ({ name: c, value: c })));
@@ -51,15 +66,6 @@ module.exports = class HelpCommand extends SlashCommand {
   }
 
   async run(ctx) {
-
-    logger.warn(cmdObjs);
-
-    /*
-    for (const c in cmdObjs) {
-      logger.info(c);
-      logger.info(cmdObjs[c]);
-    }
-    */
 
     let guild = client.guilds.cache.get(ctx.guildID);
     let executer = await guild.members.fetch(ctx.member.id);

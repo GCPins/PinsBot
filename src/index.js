@@ -25,6 +25,7 @@ const cmdFiles = fs.readdirSync(cmdsPath).filter(f => f.endsWith('.js'));
 const cmdObjs = {};
 const cmdsList = [];
 cmdFiles.forEach(async (f) => {
+  /*
   const curCmd = await import(`./commands/${f}`);
   let props = new curCmd.default();
   logger.warn(props);
@@ -32,6 +33,7 @@ cmdFiles.forEach(async (f) => {
     "perm": props.requiredPermissions ? props.requiredPermissions[0] : "",
     "description": props.description
   }
+  */
   cmdsList.push(f);
 }); // maybe make this a json object? me thinks YES
 
