@@ -10,19 +10,16 @@ module.exports = class MysteryCommand extends SlashCommand {
       guildIDs: ['660685280717701120'],
       throttling: {
         usages: 1,
-        duration: 5,
-      },
+        duration: 5
+      }
     });
   }
 
   async run(ctx) {
-
-      return ctx.send("Under construction...", { ephemeral: true });
-
+    return ctx.send('Under construction...', { ephemeral: true });
   }
 
-  static name = "mystery";
-  static perm = "";
-  static description = "d5397#%%x038  _4 2_4233ndaJAH1";
-
-}
+  static name = 'mystery';
+  static perm = '';
+  static description = 'd5397#%%x038  _4 2_4233ndaJAH1';
+};
