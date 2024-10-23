@@ -137,12 +137,11 @@ module.exports = class JailCommand extends SlashCommand {
 
       let oldRoles = await db.get(`${guild.id}.${target.id}.cr`);
       if (!oldRoles) oldRoles = []; // confiscated roles + fix for empty db
-      let _userRoles = target.roles.cache
-      let userRoles = _userRoles.map(r => r.id);
+      let userRoles = target.roles.cache.map(r => r.id);
 
       let jailRoles = [];
       oldRoles.forEach(r => {
-        if (!userRoles.includes(r) && r != jailRole) { // dont add jail role
+        if (userRoles.includes(r) && r != jailRole) { // dont add jail role
           // the user still has a role from the old roles db. add it to the roles to be preserved
           jailRoles.push(r); // should be just a role ID, should make this easier
         } // else, do not add it (effectively removing it once we set db)
