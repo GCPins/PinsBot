@@ -159,6 +159,8 @@ module.exports = class JailCommand extends SlashCommand {
         return ctx.send(`An error occured while removing the user's roles. I must have a role above their highest role for this command to work correctly.`, { ephemeral: true });
       });
 
+      db.set(`${guild.id}.${target.id}.cr`, jailRoles); // !!! do I need to push once at a time??
+
       // jail time!!!
       return ctx.send(`Successfully jailed <@${target.id}> (ID: \`${target.id}\`) by assigning them with only the role <@&${jailRole}>.\n\n*You can free the user at any time with the command \`/free user:@${target.nickname ? target.nickname : target.displayName}\`*`, { ephemeral: true });
 
