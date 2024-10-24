@@ -1,8 +1,5 @@
-const { SlashCommand, CommandOptionType, Command } = require('slash-create');
-const { client, logger, cmdsList, cmdObjs } = require('../index.js');
-const Discord = require('discord.js');
-const fs = require('fs');
-const path = require('path');
+const { SlashCommand, CommandOptionType } = require('slash-create');
+const { client, cmdObjs } = require('../index.js');
 
 module.exports = class HelpCommand extends SlashCommand {
   constructor(creator) {
@@ -112,7 +109,6 @@ module.exports = class HelpCommand extends SlashCommand {
     }
 
     let str = '';
-    let temp;
 
     for (const c in cmdObjs) {
       if (!cmdObjs[c].perm) {

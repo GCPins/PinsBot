@@ -1,6 +1,5 @@
 const { SlashCommand, CommandOptionType } = require('slash-create');
 const { client, logger } = require('../index.js');
-const Discord = require('discord.js');
 
 const { QuickDB } = require('quick.db');
 const db = new QuickDB();
@@ -11,7 +10,7 @@ module.exports = class JailCommand extends SlashCommand {
       name: 'jail',
       description: 'Jail users and manage the jail role for this server',
       guildIDs: ['660685280717701120'],
-      requiredPermissions: ["ADMINISTRATOR"],
+      requiredPermissions: ['ADMINISTRATOR'],
       throttling: {
         usages: 2,
         duration: 5
@@ -73,7 +72,6 @@ module.exports = class JailCommand extends SlashCommand {
 
   async run(ctx) {
     let guild = client.guilds.cache.get(ctx.guildID);
-    let executer = await guild.members.fetch(ctx.member.id);
     //return ctx.send('Under construction...', { ephemeral: true });
 
     let jailRole = await db.get(`${guild.id}.jr`);
@@ -86,11 +84,11 @@ module.exports = class JailCommand extends SlashCommand {
         });
       }
 
-      if (ctx.options.force.enabled != null) {
-        await db.set(`${guild.id}.fe`, ctx.options.force.enabled);
-        forceEnabled = await db.get(`${guild.id}.fe`);
-        return ctx.send(`Set the force option to **${forceEnabled}**.`, { ephemeral: true });
-      }
+      //if (ctx.options.force.enabled != null) {
+      await db.set(`${guild.id}.fe`, ctx.options.force.enabled);
+      forceEnabled = await db.get(`${guild.id}.fe`);
+      return ctx.send(`Set the force option to **${forceEnabled}**.`, { ephemeral: true });
+      //}
     }
 
     if (ctx.options.role) {
@@ -102,9 +100,9 @@ module.exports = class JailCommand extends SlashCommand {
           );
         }
 
-        if (jailRole) {
-          return ctx.send(`The jail role for this server is <@&${jailRole}> (ID: \`${jailRole}\`).`, { ephemeral: true });
-        }
+        //if (jailRole) {
+        return ctx.send(`The jail role for this server is <@&${jailRole}> (ID: \`${jailRole}\`).`, { ephemeral: true });
+        //}
       }
 
       if (ctx.options.role.set) {
@@ -137,33 +135,59 @@ module.exports = class JailCommand extends SlashCommand {
 
       let oldRoles = await db.get(`${guild.id}.${target.id}.cr`);
       if (!oldRoles) oldRoles = []; // confiscated roles + fix for empty db
-      let userRoles = target.roles.cache.map(r => r.id);
+      let userRoles = target.roles.cache.map((r) => r.id);
 
       let jailRoles = [];
-      oldRoles.forEach(r => {
-        if (userRoles.includes(r) && r != jailRole) { // dont add jail role
+      /*
+      oldRoles.forEach((r) => {
+        if (userRoles.includes(r) && r != jailRole) {
+          // dont add jail role
           // the user still has a role from the old roles db. add it to the roles to be preserved
           jailRoles.push(r); // should be just a role ID, should make this easier
         } // else, do not add it (effectively removing it once we set db)
-      })
+      });
+      */        //ONLY ADD THE ROLES THE USER CURRENTLY HAS!
 
-      userRoles.forEach(r => {
+      userRoles.forEach((r) => {
         if (r == jailRole) return; // don't add jail role to array might break stuff
         jailRoles.push(r);
-      })
+      });
 
       logger.warn('USER ROLES to save: ' + jailRoles);
 
-      target.roles.set([jailRole]).catch(err => {
-        logger.warn('I don\'t have permission to do that.');
-        return ctx.send(`An error occured while removing the user's roles. I must have a role above their highest role for this command to work correctly.`, { ephemeral: true });
+      target.roles.set([jailRole])
+      .then(async () => {
+        await db.set(`${guild.id}.${target.id}.cr`, jailRoles); // !!! do I need to push once at a time??
+        return await ctx.send(
+          `Successfully jailed <@${target.id}> (ID: \`${
+            target.id
+          }\`) by assigning them with only the role <@&${jailRole}>.\n\n*You can free the user at any time with the command \`/free user:@${
+            target.nickname ? target.nickname : target.displayName
+          }\`*`,
+          { ephemeral: true }
+        );
+      })
+      .catch(async (err) => {
+        logger.warn("I don't have permission to do that.");
+        return await ctx.send(
+          `An error occured while removing the user's roles. I must have a role above their highest role for this command to work correctly.`,
+          { ephemeral: true }
+        );
       });
-
+      /*
       db.set(`${guild.id}.${target.id}.cr`, jailRoles); // !!! do I need to push once at a time??
+      logger.warn(await db.get(`${guild.id}.${target.id}.cr`));
 
       // jail time!!!
-      return ctx.send(`Successfully jailed <@${target.id}> (ID: \`${target.id}\`) by assigning them with only the role <@&${jailRole}>.\n\n*You can free the user at any time with the command \`/free user:@${target.nickname ? target.nickname : target.displayName}\`*`, { ephemeral: true });
-
+      return ctx.send(
+        `Successfully jailed <@${target.id}> (ID: \`${
+          target.id
+        }\`) by assigning them with only the role <@&${jailRole}>.\n\n*You can free the user at any time with the command \`/free user:@${
+          target.nickname ? target.nickname : target.displayName
+        }\`*`,
+        { ephemeral: true }
+      );
+      */
     }
   }
 

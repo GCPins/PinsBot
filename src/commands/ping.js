@@ -1,5 +1,5 @@
-const { SlashCommand, CommandOptionType } = require('slash-create');
-const { client, logger } = require('../index.js');
+const { SlashCommand } = require('slash-create');
+const { client } = require('../index.js');
 const Discord = require('discord.js');
 
 module.exports = class PingCommand extends SlashCommand {

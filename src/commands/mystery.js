@@ -1,4 +1,4 @@
-const { SlashCommand, CommandOptionType } = require('slash-create');
+const { SlashCommand } = require('slash-create');
 const { client, logger } = require('../index.js');
 const Discord = require('discord.js');
 
