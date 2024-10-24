@@ -18,14 +18,26 @@ module.exports = class DeathCommand extends SlashCommand {
           description: 'Roll a secret death save that is only visible to you'
         },
         {
-          type: CommandOptionType.SUB_COMMAND,
+          type: CommandOptionType.SUB_COMMAND_GROUP,
           name: 'channel',
           description: 'Set/view the channel a copy of the roll should be sent to',
           options: [
             {
-              type: CommandOptionType.CHANNEL,
+              name: 'view',
+              description: 'View the current channel a copy of the rolls are sent to',
+              type: CommandOptionType.SUB_COMMAND
+            },
+            {
               name: 'set',
-              description: 'The channel to send a copy of a roll to'
+              description: 'Set the channel to send a copy of the rolls to',
+              type: CommandOptionType.SUB_COMMAND,
+              options: [
+                {
+                  type: CommandOptionType.CHANNEL,
+                  name: 'channel',
+                  description: 'The channel to send a copy of a roll to'
+                }
+              ]
             }
           ]
         }
@@ -65,9 +77,9 @@ module.exports = class DeathCommand extends SlashCommand {
       }
 
       if (ctx.options.channel.set) {
-        await db.set(`${ctx.guildID}.deathc`, ctx.options.channel.set);
+        await db.set(`${ctx.guildID}.deathc`, ctx.options.channel.set.channel);
         return ctx.send(
-          `You changed the channel to <#${ctx.options.channel.set}> (ID: \`${ctx.options.channel.set}\`)`,
+          `You changed the channel to <#${ctx.options.channel.set.channel}> (ID: \`${ctx.options.channel.set.channel}\`)`,
           { ephemeral: true }
         );
       }

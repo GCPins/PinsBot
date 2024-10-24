@@ -21,7 +21,8 @@ module.exports = class FreeCommand extends SlashCommand {
           type: CommandOptionType.USER,
           required: true
         }
-      ]
+      ],
+      requiredPermissions: ["ADMINISTRATOR"]
     });
   }
 
@@ -47,7 +48,7 @@ module.exports = class FreeCommand extends SlashCommand {
 
     target.roles.set(jailRoles)
       .then(async () => {
-        return await ctx.send(`Freed <@${target.id}> (ID: \`${target.id}\`) from their shackles.\n\nYou can send them back to jail at any time (\`/jail user name:@${target.nickname ? target.nickname : target.displayName}\`).`, { ephemeral: true });
+        return await ctx.send(`Freed <@${target.id}> (ID: \`${target.id}\`) from their shackles.\n\n*You can send them back to jail at any time (\`/jail user name:@${target.nickname ? target.nickname : target.displayName}\`).*`, { ephemeral: true });
       })
       .catch(async (err) => {
       logger.warn("I don't have permission to do that - ERR:\n" + err);

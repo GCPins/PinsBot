@@ -133,8 +133,8 @@ module.exports = class JailCommand extends SlashCommand {
         );
       }
 
-      let oldRoles = await db.get(`${guild.id}.${target.id}.cr`);
-      if (!oldRoles) oldRoles = []; // confiscated roles + fix for empty db
+      //let oldRoles = await db.get(`${guild.id}.${target.id}.cr`);
+      //if (!oldRoles) oldRoles = []; // confiscated roles + fix for empty db
       let userRoles = target.roles.cache.map((r) => r.id);
 
       let jailRoles = [];
@@ -153,7 +153,7 @@ module.exports = class JailCommand extends SlashCommand {
         jailRoles.push(r);
       });
 
-      logger.warn('USER ROLES to save: ' + jailRoles);
+      //logger.warn('USER ROLES to save: ' + jailRoles);
 
       target.roles.set([jailRole])
       .then(async () => {
@@ -161,9 +161,9 @@ module.exports = class JailCommand extends SlashCommand {
         return await ctx.send(
           `Successfully jailed <@${target.id}> (ID: \`${
             target.id
-          }\`) by assigning them with only the role <@&${jailRole}>.\n\n*You can free the user at any time with the command \`/free user:@${
+          }\`) by assigning them with only the role <@&${jailRole}>.\n\n*You can free the user at any time (\`/free user:@${
             target.nickname ? target.nickname : target.displayName
-          }\`*`,
+          }\`).*`,
           { ephemeral: true }
         );
       })
