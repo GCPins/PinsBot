@@ -22,7 +22,11 @@ module.exports = class MoveallCommand extends SlashCommand {
       ],
       guildIDs: ['660685280717701120'],
       requiredPermissions: ['MOVE_MEMBERS'],
-      defaultPermission: false
+      defaultPermission: false,
+      throttling: {
+        usages: 2,
+        duration: 5
+      }
     });
   }
 

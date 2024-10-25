@@ -11,6 +11,10 @@ module.exports = class DeathCommand extends SlashCommand {
       name: 'death',
       description: 'Death save rolling (and management)',
       guildIDs: ['660685280717701120'],
+      throttling: {
+        usages: 3,
+        duration: 5
+      },
       options: [
         {
           type: CommandOptionType.SUB_COMMAND,

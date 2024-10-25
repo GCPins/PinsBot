@@ -11,7 +11,7 @@ module.exports = class FreeCommand extends SlashCommand {
       description: 'Free a user from jail',
       guildIDs: ['660685280717701120'],
       throttling: {
-        usages: 1,
+        usages: 2,
         duration: 5
       },
       options: [
